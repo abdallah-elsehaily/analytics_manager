@@ -1,4 +1,3 @@
-import '../pwc_analytics_manager/analytics_manager/analytics_manager.dart';
 import '../pwc_analytics_manager/pwc_analytics_manger.dart';
 
 const String _orderValueKey = 'orderValue';
@@ -7,7 +6,7 @@ const String _productName = 'productName';
 class AnalyticsEventsLogger {
   AnalyticsEventsLogger._();
 
-  static AnalyticsManager get _analyticsManager => AnalyticsManager.instance;
+  static AnalyticsServiceManager get _analyticsManager => AnalyticsServiceManager.instance;
 
   static logPurchaseEvent(double orderValue) {
     _analyticsManager

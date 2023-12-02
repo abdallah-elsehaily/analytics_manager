@@ -1,17 +1,15 @@
-import 'package:analytics_manager/pwc_analytics_manager/screen_view_tracker/analytics_route_observer.dart';
 import 'package:flutter/material.dart';
-import 'package:analytics_manager/pwc_analytics_manager/analytics_provider/firebase_analytics_provider.dart';
-import '../pwc_analytics_manager/analytics_manager/analytics_manager.dart';
+import 'package:analytics_manager/pwc_analytics_manager/pwc_analytics_manger.dart';
 import 'analytics_events_logger.dart';
 
 void main() {
-  AnalyticsManager.initialize(
-      [FirebaseAnalyticsProvider(), AdjustAnalyticsProvider()]);
+  AnalyticsServiceManager.initialize([FirebaseAnalyticsService()]);
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -24,9 +22,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
 
-      navigatorObservers: [
-        AnalyticsRouteObserver()
-      ],
+      navigatorObservers: [AnalyticsRouteObserver()],
       // A widget which will be started on application startup
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
@@ -35,6 +31,7 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatelessWidget {
   final String title;
+
   const MyHomePage({super.key, required this.title});
 
   @override

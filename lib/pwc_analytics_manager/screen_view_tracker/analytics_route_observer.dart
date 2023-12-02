@@ -1,10 +1,10 @@
-import 'package:analytics_manager/pwc_analytics_manager/analytics_manager/analytics_manager.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/services.dart';
+import '../analytics_service_manager/analytics_service_manager.dart';
 
-typedef ScreenNameExtractor = String? Function(RouteSettings settings);
+typedef ScreenNameExtractor = String? Function(Route settings);
 
-String? defaultNameExtractor(RouteSettings settings) => settings.name;
+String? defaultNameExtractor(Route route) => route.settings.name;
 
 typedef RouteFilter = bool Function(Route<dynamic>? route);
 
@@ -16,27 +16,26 @@ class AnalyticsRouteObserver extends RouteObserver<ModalRoute<dynamic>> {
     this.routeFilter = defaultRouteFilter,
     Function(PlatformException error)? onError,
   })  : _onError = onError,
-        _analyticsManager = AnalyticsManager.instance;
+        _analyticsManager = AnalyticsServiceManager.instance;
 
-  final AnalyticsManager _analyticsManager;
+  final AnalyticsServiceManager _analyticsManager;
   final ScreenNameExtractor nameExtractor;
   final RouteFilter routeFilter;
   final void Function(PlatformException error)? _onError;
 
   void _sendScreenView(Route<dynamic> route) {
-    final String? screenName = nameExtractor(route.settings);
+    final String? screenName = nameExtractor(route);
     if (screenName != null) {
-      _analyticsManager.setCurrentScreen(screenName).catchError(
-        (Object error) {
-          final onError = _onError;
-          if (onError == null) {
-            debugPrint('$AnalyticsRouteObserver: $error');
-          } else {
-            onError(error as PlatformException);
-          }
-        },
-        test: (Object error) => error is PlatformException,
-      );
+      try {
+        _analyticsManager.setCurrentScreen(screenName);
+      } catch (error) {
+        final onError = _onError;
+        if (onError == null) {
+          debugPrint('$AnalyticsRouteObserver: $error');
+        } else {
+          onError(error as PlatformException);
+        }
+      }
     }
   }
 
