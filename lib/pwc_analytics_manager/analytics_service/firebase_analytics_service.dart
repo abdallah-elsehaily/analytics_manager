@@ -1,9 +1,9 @@
-import 'package:analytics_manager/pwc_analytics_manager/analytics_service/i_analytics_service.dart';
+import 'package:analytics_manager/pwc_analytics_manager/analytics_service/analytics_service.dart';
 import 'package:analytics_manager/pwc_analytics_manager/enums/analytics_event.dart';
 import 'package:analytics_manager/pwc_analytics_manager/enums/analytics_user_properties.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 
-class FirebaseAnalyticsService implements IAnalyticsService {
+class FirebaseAnalyticsService implements AnalyticsService {
   FirebaseAnalytics get _firebaseAnalytics => FirebaseAnalytics.instance;
 
   @override

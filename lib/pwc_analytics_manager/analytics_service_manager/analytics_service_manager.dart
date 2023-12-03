@@ -1,16 +1,20 @@
-import '../analytics_service/i_analytics_service.dart';
+import '../analytics_service/analytics_service.dart';
 import '../enums/analytics_event.dart';
 import '../enums/analytics_user_properties.dart';
 
 final class AnalyticsServiceManager {
-  late final List<IAnalyticsService> _analyticsServices;
+  late final List<AnalyticsService> _analyticsServices;
 
-  static AnalyticsServiceManager get instance => _instance!;
+  static AnalyticsServiceManager get instance {
+   _instance ??=  AnalyticsServiceManager.initialize([]);
+   return _instance!;
+  }
 
   static AnalyticsServiceManager? _instance;
 
-  AnalyticsServiceManager.initialize(List<IAnalyticsService> services) {
-    _instance ??= AnalyticsServiceManager._(services);
+  factory AnalyticsServiceManager.initialize(List<AnalyticsService> services) {
+    _instance = AnalyticsServiceManager._(services);
+    return instance;
   }
 
   AnalyticsServiceManager._(this._analyticsServices);
@@ -28,6 +32,6 @@ final class AnalyticsServiceManager {
   void setCurrentScreen(String screenName) =>
       _doForAllProviders((provider) => provider.setCurrentScreen(screenName));
 
-  void _doForAllProviders(Function(IAnalyticsService service) action) =>
+  void _doForAllProviders(Function(AnalyticsService service) action) =>
       _analyticsServices.forEach(action);
 }
