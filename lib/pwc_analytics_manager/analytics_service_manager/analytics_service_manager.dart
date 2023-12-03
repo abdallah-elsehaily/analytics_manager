@@ -5,12 +5,16 @@ import '../enums/analytics_user_properties.dart';
 final class AnalyticsServiceManager {
   late final List<IAnalyticsService> _analyticsServices;
 
-  static AnalyticsServiceManager get instance => _instance!;
+  static AnalyticsServiceManager get instance {
+   _instance ??=  AnalyticsServiceManager.initialize([]);
+   return _instance!;
+  }
 
   static AnalyticsServiceManager? _instance;
 
-  AnalyticsServiceManager.initialize(List<IAnalyticsService> services) {
-    _instance ??= AnalyticsServiceManager._(services);
+  factory AnalyticsServiceManager.initialize(List<IAnalyticsService> services) {
+    _instance = AnalyticsServiceManager._(services);
+    return instance;
   }
 
   AnalyticsServiceManager._(this._analyticsServices);
