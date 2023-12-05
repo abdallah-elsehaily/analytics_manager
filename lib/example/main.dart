@@ -1,55 +1,29 @@
+import 'package:analytics_manager/example/my_app.dart';
+import 'package:analytics_manager/firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:analytics_manager/pwc_analytics_manager/pwc_analytics_manger.dart';
+import 'package:get_it/get_it.dart';
+
 import 'analytics_events_logger.dart';
 
-void main() {
-  AnalyticsServiceManager.initialize([FirebaseAnalyticsService()]);
+void main() async {
+  setUpGetItDI();
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      // Application name
-      title: 'Flutter Hello World',
-      // Application theme data, you can set the colors for the application as
-      // you want
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-
-      navigatorObservers: [AnalyticsRouteObserver()],
-      // A widget which will be started on application startup
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
+void setUpGetItDI() {
+  var analyticsManagerService =
+      AnalyticsServiceManager.initialize([FirebaseAnalyticsService()]);
+  final getIt = GetIt.instance;
+  getIt.registerSingleton<UserPropertiesAnalyticsService>(
+      analyticsManagerService);
+  getIt
+      .registerSingleton<EventsLoggerAnalyticsService>(analyticsManagerService);
+  getIt.registerSingleton<CurrentPageTrackerAnalyticsService>(
+      analyticsManagerService);
+  getIt.registerSingleton<AnalyticsService>(analyticsManagerService);
+  getIt.registerSingleton<AnalyticsEventsLogger>(AnalyticsEventsLogger());
 }
 
-class MyHomePage extends StatelessWidget {
-  final String title;
 
-  const MyHomePage({super.key, required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        // The title text which will be shown on the action bar
-        title: Text(title),
-      ),
-      body: Center(
-          child: TextButton(
-        child: const Text(
-          'Hello, World!',
-        ),
-        onPressed: () {
-          AnalyticsEventsLogger.logPurchaseEvent(500);
-        },
-      )),
-    );
-  }
-}

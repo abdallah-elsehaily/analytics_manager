@@ -1,3 +1,4 @@
+export 'analytics_service/analytics_service.dart';
 export 'analytics_service/firebase_analytics_service.dart';
 export 'analytics_service_manager/analytics_service_manager.dart';
 export 'enums/analytics_event.dart';

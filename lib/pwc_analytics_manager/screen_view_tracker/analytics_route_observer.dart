@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/services.dart';
-import '../analytics_service_manager/analytics_service_manager.dart';
+import 'package:get_it/get_it.dart';
+import '../analytics_service/analytics_service.dart';
 
 typedef ScreenNameExtractor = String? Function(Route settings);
 
@@ -16,9 +17,10 @@ class AnalyticsRouteObserver extends RouteObserver<ModalRoute<dynamic>> {
     this.routeFilter = defaultRouteFilter,
     Function(PlatformException error)? onError,
   })  : _onError = onError,
-        _analyticsManager = AnalyticsServiceManager.instance;
+        _analyticsServiceManager =
+            GetIt.instance.get<CurrentPageTrackerAnalyticsService>();
 
-  final AnalyticsServiceManager _analyticsManager;
+  final CurrentPageTrackerAnalyticsService _analyticsServiceManager;
   final ScreenNameExtractor nameExtractor;
   final RouteFilter routeFilter;
   final void Function(PlatformException error)? _onError;
@@ -27,7 +29,7 @@ class AnalyticsRouteObserver extends RouteObserver<ModalRoute<dynamic>> {
     final String? screenName = nameExtractor(route);
     if (screenName != null) {
       try {
-        _analyticsManager.setCurrentScreen(screenName);
+        _analyticsServiceManager.setCurrentScreen(screenName);
       } catch (error) {
         final onError = _onError;
         if (onError == null) {

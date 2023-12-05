@@ -3,7 +3,7 @@ import 'package:analytics_manager/pwc_analytics_manager/enums/analytics_event.da
 import 'package:analytics_manager/pwc_analytics_manager/enums/analytics_user_properties.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 
-class FirebaseAnalyticsService implements AnalyticsService {
+final class FirebaseAnalyticsService implements AnalyticsService {
   FirebaseAnalytics get _firebaseAnalytics => FirebaseAnalytics.instance;
 
   @override
@@ -19,6 +19,6 @@ class FirebaseAnalyticsService implements AnalyticsService {
           name: event.googleKey, parameters: parameters);
 
   @override
-  setCurrentScreen(String screenName) =>
+  setCurrentScreen(String screenName, [Map<String, dynamic>? parameters]) =>
       _firebaseAnalytics.setCurrentScreen(screenName: screenName);
 }
